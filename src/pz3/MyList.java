@@ -63,11 +63,6 @@ public class MyList<T> implements IMyList<T> {
         tail = null;
     }
 
-    public T remove(int index) {
-        Node<T> temp = head;
-        return temp.data;
-    }
-
     public boolean remove(T o) { // видалити елемент із контейнера
         Node<T> temp = head;
         while (temp != null) {
@@ -81,7 +76,6 @@ public class MyList<T> implements IMyList<T> {
                 } else {                        //якщо всередині
                     temp.prev.next = temp.next;
                     temp.next.prev = temp.prev;
-                    //temp.prev = temp.prev.prev;
                 }
                 size--;
                 return true;
@@ -162,7 +156,7 @@ public class MyList<T> implements IMyList<T> {
         }
         @Override
         public boolean hasNext() {
-            return currentNode != tail;
+            return currentNode != null;
         }
         @Override
         public T next() {
