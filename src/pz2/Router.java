@@ -1,5 +1,8 @@
 package pz2;
-public abstract class Router implements Comparable<Router> {
+
+public class Router implements Comparable<Router> {
+    int RouterID;
+    int typeOfRouterID;
     int maxSpeed;
     double wifiFrequency;
     int numberOfAntennas;
@@ -10,12 +13,15 @@ public abstract class Router implements Comparable<Router> {
     String brand;
     double price;
     public String toString(){
-        return "Type: " + this.getClass().getSimpleName() + " maxSpeed: "+maxSpeed +" wifiFrequency: " + wifiFrequency + " numberOfAntennas: " +
-                numberOfAntennas+ " color: " + color + " weight: " + weight  + "power: " + power
+        return  "ID: " + RouterID + " Type: " + typeOfRouterID + " maxSpeed: "+maxSpeed
+                +" wifiFrequency: " + wifiFrequency + " numberOfAntennas: " + numberOfAntennas
+                + " color: " + color + " weight: " + weight  + " power: " + power
                 + " protection: " + protection + " brand: " + brand  + " price: " + price;
     }
-    public Router(int maxSpeed, double wifiFrequency, int numberOfAntennas, String color,
+    public Router(int RouterID, int type, int maxSpeed, double wifiFrequency, int numberOfAntennas, String color,
                   int weight, int power, Protection protection, String brand, double price) {
+        this.RouterID = RouterID;
+        this.typeOfRouterID = type;
         this.maxSpeed = maxSpeed;
         this.wifiFrequency = wifiFrequency;
         this.numberOfAntennas = numberOfAntennas;

@@ -1,29 +1,29 @@
 package pz2;
+
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         Router[] arr = new Router[7];
-        arr[0] = new MobileRouter(10,2.4,2,"black",180,
+        arr[0] = new MobileRouter(0, 3,10,2.4,2,"black",180,
                 100, Protection.WPA3,"D-Link", 1400, "LTE");
         arr[1] = new AdslRouter
-                (11, 3.7, 3, "pink", 700, 200,
+                (1,1,11, 3.7, 3, "pink", 700, 200,
                         Protection.WPA2,"ASUS",899.99,"telephone");
         arr[2] = new AdslRouter
-                (20, 3.5, 3, "green", 750, 100,
+                (2,1,20, 3.5, 3, "green", 750, 100,
                         Protection.WEP, "Tenda",500,"telephone");
         arr[3] = new MobileRouter
-                (15, 2.4, 1, "red", 650, 200,
+                (3,3,15, 2.4, 1, "red", 650, 200,
                         Protection.WPA2,"Intel",2499.99,"3G");
         arr[4] = new MobileRouter
-                (12, 4.4, 3, "gray", 750, 200,
+                (4,3,12, 4.4, 3, "gray", 750, 200,
                         Protection.WPA3,"ASUS",1800,"LTE");
         arr[5] = new EthernetRouter
-                (23, 4.9, 1, "blue", 300, 100,
+                (5,2,23, 4.9, 1, "blue", 300, 100,
                         Protection.WEP,"D-Link", 2400,"fiber optic",150);
-        arr[6] = new EthernetRouter
-                (16, 5, 1, "blue", 400, 200,
-                        Protection.WPA3,"Intel",2000,"fiber optic");
+        arr[6] = new EthernetRouter(6,2, 16, 5, 1, "blue",
+                400, 200, Protection.WPA3,"Intel",2000,"fiber optic");
 
         System.out.println("\tBeginning array of routers:");
         for (int i = 0; i < arr.length; i++) {
