@@ -39,7 +39,7 @@ public interface IMyDAO {
     void getRoutersByBrand(String brand) throws SQLException;
     void getRoutersByPrice(double price) throws SQLException;
 
-    // Добавление нового роутера/его типа/покупателя/покупки
+    // Добавление нового роутера, его типа, покупателя, покупки
     void addRouter (int RouterID, int type, int maxSpeed, double wifiFrequency, int numberOfAntennas, String color,
                     int weight, int power, Protection protection, String brand, double price)
             throws SQLException;
@@ -53,8 +53,10 @@ public interface IMyDAO {
     void changePriceRouter(int newPrice, int RouterID) throws SQLException;
     // Изменение номера телефона покупателя по фамилии
     void changePhoneNumberCustomer( String newPhoneNumber, String surname) throws SQLException;
+    void changeDateOfBuy(Date newDateOfBuy,int buyID) throws SQLException;
 
-    // Удаление роутера/покупателя/покупки по id
+
+        // Удаление роутера/покупателя/покупки по заданному ID
     void deleteRouterById(int RouterID) throws SQLException;
     void deleteCustomerById(int customerID) throws SQLException;
     void deleteBuyById(int buyID) throws SQLException;

@@ -44,6 +44,7 @@ public class MySQLDAO implements IMyDAO {
 
     // Для отримання всіх об'єктів, що задовільняють параметрам
     public static String SELECT_ROUTERS_BY_ID = "SELECT * FROM " + NAME_OF_TABLE_ROUTERS + " WHERE RouterID = ?";
+    public static String SELECT_ROUTERS_BY_TYPE = "SELECT * FROM " + NAME_OF_TABLE_ROUTERS + " WHERE typeOfRouterID = ?";
     public static String SELECT_ROUTERS_BY_MAX_SPEED = "SELECT * FROM " + NAME_OF_TABLE_ROUTERS + " WHERE maxSpeed = ?";
     public static String SELECT_ROUTERS_BY_WIFI_FREQUENCY = "SELECT * FROM " + NAME_OF_TABLE_ROUTERS + " WHERE wifiFrequency = ?";
     public static String SELECT_ROUTERS_BY_NUMBER_OF_ANTENNAS = "SELECT * FROM " + NAME_OF_TABLE_ROUTERS + " WHERE numberOfAntennas = ?";
@@ -79,9 +80,11 @@ public class MySQLDAO implements IMyDAO {
 
     // Оновлення даних по ID об'єкта
     public static String UPDATE_PRICE_ROUTER = "UPDATE " + NAME_OF_TABLE_ROUTERS +
-            " SET price = ? WHERE RouterID LIKE ?";
+            " SET price = ? WHERE RouterID = ?";
     public static String UPDATE_PHONE_NUMBER_CUSTOMER = "UPDATE " + NAME_OF_TABLE_CUSTOMERS +
             " SET phoneNumber = ? WHERE surname = ?";
+    public static String UPDATE_DATE_OF_BUY = "UPDATE " + NAME_OF_TABLE_BUY +
+            " SET dateOfBuy = ? WHERE buyID = ?";
 
     // Рівні ізоляцій транзакцій
     @Override
@@ -120,11 +123,10 @@ public class MySQLDAO implements IMyDAO {
         ResultSet rs = st.executeQuery(GET_ALL_CUSTOMERS);
         MyList<Customer> customers = new MyList<>();
         while (rs.next()) {
-            System.out.print(rs.getInt("customerID") + " " + rs.getString("surname") + " " +
-                    rs.getString("name") + " " + rs.getString("patronymic") + " " +
-                    rs.getString("phoneNumber") + " " + rs.getString("deliveryAdress")
-                    + " " + rs.getString("email"));
-            System.out.println();
+            customers.addLast(new Customer(rs.getInt("customerID"), rs.getString("surname"),
+                    rs.getString("name"), rs.getString("patronymic"),
+                    rs.getString("phoneNumber"),rs.getString("deliveryAdress"),
+                    rs.getString("email")));
         }
         rs.close();
         st.close();
@@ -136,10 +138,9 @@ public class MySQLDAO implements IMyDAO {
         ResultSet rs = st.executeQuery(GET_ALL_BUY);
         MyList<Buy> buy = new MyList<>();
         while (rs.next()) {
-            System.out.print(rs.getInt("buyID") + " " + rs.getDate("dateOfBuy") + " " +
-                    rs.getInt("customerID") + " " + rs.getInt("fullPrice") + " " +
-                    rs.getString("currency") + " " + rs.getInt("RouterID"));
-            System.out.println();
+            buy.addLast(new Buy(rs.getInt("buyID"), rs.getDate("dateOfBuy"),
+                    rs.getInt("customerID"), rs.getInt("fullPrice"),
+                    rs.getString("currency"), rs.getInt("RouterID")));
         }
         rs.close();
         st.close();
@@ -151,9 +152,8 @@ public class MySQLDAO implements IMyDAO {
         ResultSet rs = st.executeQuery(GET_ALL_TYPES_OF_ROUTERS);
         MyList<TypesOfRouters> types = new MyList<>();
         while (rs.next()) {
-            System.out.print(rs.getInt("typeOfRouterID") + " " +
-                    rs.getString("description"));
-            System.out.println();
+            types.addLast(new TypesOfRouters(rs.getInt("typeOfRouterID"),
+                    rs.getString("description")));
         }
         rs.close();
         st.close();
@@ -173,7 +173,6 @@ public class MySQLDAO implements IMyDAO {
                     rs.getString("protection") + " " + rs.getString("brand")
                             + " "+ rs.getDouble("price"));
         }
-        System.out.println();
         rs.close();
         st.close();
     }
@@ -197,7 +196,7 @@ public class MySQLDAO implements IMyDAO {
     }
     @Override
     public void getRoutersByType(int type) throws SQLException{
-        PreparedStatement ps = conn.prepareStatement(SELECT_ROUTERS_BY_ID);
+        PreparedStatement ps = conn.prepareStatement(SELECT_ROUTERS_BY_TYPE);
         ps.setInt(1, type);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
@@ -422,15 +421,24 @@ public class MySQLDAO implements IMyDAO {
         ps.close();
     }
     @Override
-    public void changePhoneNumberCustomer(String surname, String newPhoneNumber) throws SQLException {
+    public void changePhoneNumberCustomer(String newPhoneNumber, String surname) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(UPDATE_PHONE_NUMBER_CUSTOMER);
-        ps.setString(1, surname);
-        ps.setString(2, newPhoneNumber);
+        ps.setString(1, newPhoneNumber);
+        ps.setString(2, surname);
+        ps.executeUpdate();
+        ps.close();
+    }
+    @Override
+    public void changeDateOfBuy(Date newDateOfBuy,int buyID) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement(UPDATE_DATE_OF_BUY);
+        ps.setDate(1, (java.sql.Date) newDateOfBuy);
+        ps.setInt(2, buyID);
         ps.executeUpdate();
         ps.close();
     }
 
-    // Видалення роутера, покупця, покупку по ID
+
+    // Видалення роутера, типу роутера, покупця, покупки по ID
     @Override
     public void deleteRouterById(int RouterID) throws SQLException{
         PreparedStatement ps = conn.prepareStatement(DELETE_DATA_FROM_ROUTER_BY_ID);
